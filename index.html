@@ -1108,7 +1108,7 @@
       <div class="price-top">
         <div>
           <h3>Website Setup</h3>
-          <p>One-time fee</p>
+          <p>One-time fee · <strong style="color: var(--accent);">Tax included, nothing extra</strong></p>
         </div>
         <div class="price-num"><sup>$</sup>500</div>
       </div>
@@ -1118,8 +1118,15 @@
         <li>Mobile & desktop optimized</li>
         <li>Domain setup assistance</li>
         <li>2 rounds of revisions</li>
+        <li>Live in 48 hours</li>
       </ul>
-      <a href="https://tally.so/r/ODzxBR" target="_blank" class="btn btn-dark">Get started →</a>
+      <div style="background: #f0f5ff; border: 1px solid rgba(0,102,255,0.15); border-radius: 8px; padding: 0.85rem 1rem; margin-bottom: 1.25rem; font-size: 0.82rem; color: var(--muted); line-height: 1.6;">
+        💡 <strong style="color: var(--ink);">No ongoing fees from us.</strong> The only recurring cost is your domain — typically $15–20/year. Hosting is on us.
+      </div>
+      <div style="background: #fff8e8; border: 1px solid rgba(255,160,0,0.2); border-radius: 8px; padding: 0.85rem 1rem; margin-bottom: 1.25rem; font-size: 0.82rem; color: var(--muted); line-height: 1.6;">
+        ⚡ <strong style="color: var(--ink);">Fast doesn't mean cheap.</strong> Every site is built with care and attention to detail.
+      </div>
+      <a href="https://tally.so/r/ODzxBR" target="_blank" class="btn btn-dark">Get started — it takes 5 minutes →</a>
     </div>
   </section>
 
@@ -1139,13 +1146,13 @@
         <a class="reference-link" href="https://wegather.ca" target="_blank">wegather.ca →</a>
       </div>
       <div class="reference-photos">
-        <div class="photo-frame" onclick="openLightbox('https://raw.githubusercontent.com/bariscoach/haltonsites.ca/main/gather_1.png')">
+        <div class="photo-frame" onclick="openLightbox('https://raw.githubusercontent.com/bariscoach/haltonsites.ca/main/gather_1.png')" ontouchstart="openLightbox('https://raw.githubusercontent.com/bariscoach/haltonsites.ca/main/gather_1.png')">
           <img src="https://raw.githubusercontent.com/bariscoach/haltonsites.ca/main/gather_1.png" alt="gather. screenshot 1" loading="lazy"/>
         </div>
-        <div class="photo-frame" onclick="openLightbox('https://raw.githubusercontent.com/bariscoach/haltonsites.ca/main/gather_2.png')">
+        <div class="photo-frame" onclick="openLightbox('https://raw.githubusercontent.com/bariscoach/haltonsites.ca/main/gather_2.png')" ontouchstart="openLightbox('https://raw.githubusercontent.com/bariscoach/haltonsites.ca/main/gather_2.png')">
           <img src="https://raw.githubusercontent.com/bariscoach/haltonsites.ca/main/gather_2.png" alt="gather. screenshot 2" loading="lazy"/>
         </div>
-        <div class="photo-frame" onclick="openLightbox('https://raw.githubusercontent.com/bariscoach/haltonsites.ca/main/gather_3.png')">
+        <div class="photo-frame" onclick="openLightbox('https://raw.githubusercontent.com/bariscoach/haltonsites.ca/main/gather_3.png')" ontouchstart="openLightbox('https://raw.githubusercontent.com/bariscoach/haltonsites.ca/main/gather_3.png')">
           <img src="https://raw.githubusercontent.com/bariscoach/haltonsites.ca/main/gather_3.png" alt="gather. screenshot 3" loading="lazy"/>
         </div>
       </div>
@@ -1153,7 +1160,7 @@
   </section>
 
   <!-- LIGHTBOX -->
-  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()" ontouchstart="closeLightbox()">
     <button class="lightbox-close" onclick="closeLightbox()">✕</button>
     <img id="lightbox-img" src="" alt="Screenshot preview"/>
   </div>
@@ -1251,12 +1258,12 @@
 
       // ── FAQ accordion ──
       document.querySelectorAll('.faq-question').forEach(function(btn) {
-        btn.addEventListener('click', function() {
+        ['click','touchstart'].forEach(function(evt) { btn.addEventListener(evt, function(e) { e.preventDefault();
           var card = btn.closest('.faq-card');
           var isOpen = card.classList.contains('open');
           document.querySelectorAll('.faq-card.open').forEach(function(el) { el.classList.remove('open'); });
           if (!isOpen) card.classList.add('open');
-        });
+        }); }); 
       });
 
       // ── Scroll shadow on nav ──
