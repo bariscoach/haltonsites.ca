@@ -1146,13 +1146,13 @@
         <a class="reference-link" href="https://wegather.ca" target="_blank">wegather.ca →</a>
       </div>
       <div class="reference-photos">
-        <div class="photo-frame" onclick="openLightbox('https://raw.githubusercontent.com/bariscoach/haltonsites.ca/main/gather_1.png')" ontouchstart="openLightbox('https://raw.githubusercontent.com/bariscoach/haltonsites.ca/main/gather_1.png')">
+        <div class="photo-frame">
           <img src="https://raw.githubusercontent.com/bariscoach/haltonsites.ca/main/gather_1.png" alt="gather. screenshot 1" loading="lazy"/>
         </div>
-        <div class="photo-frame" onclick="openLightbox('https://raw.githubusercontent.com/bariscoach/haltonsites.ca/main/gather_2.png')" ontouchstart="openLightbox('https://raw.githubusercontent.com/bariscoach/haltonsites.ca/main/gather_2.png')">
+        <div class="photo-frame">
           <img src="https://raw.githubusercontent.com/bariscoach/haltonsites.ca/main/gather_2.png" alt="gather. screenshot 2" loading="lazy"/>
         </div>
-        <div class="photo-frame" onclick="openLightbox('https://raw.githubusercontent.com/bariscoach/haltonsites.ca/main/gather_3.png')" ontouchstart="openLightbox('https://raw.githubusercontent.com/bariscoach/haltonsites.ca/main/gather_3.png')">
+        <div class="photo-frame">
           <img src="https://raw.githubusercontent.com/bariscoach/haltonsites.ca/main/gather_3.png" alt="gather. screenshot 3" loading="lazy"/>
         </div>
       </div>
@@ -1160,8 +1160,8 @@
   </section>
 
   <!-- LIGHTBOX -->
-  <div class="lightbox" id="lightbox" onclick="closeLightbox()" ontouchstart="closeLightbox()">
-    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close">✕</button>
     <img id="lightbox-img" src="" alt="Screenshot preview"/>
   </div>
 
@@ -1253,17 +1253,18 @@
     <span>One-page websites for small businesses · <a href="/cdn-cgi/l/email-protection#472526352e342f2e3d616471737c202a262e2b6924282a">barishiz&#64;gmail.com</a></span>
   </footer>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>  <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>    <script>
     document.addEventListener('DOMContentLoaded', function() {
 
-      // ── FAQ accordion ──
+      // ── FAQ accordion — works on both mobile and desktop ──
       document.querySelectorAll('.faq-question').forEach(function(btn) {
-        ['click','touchstart'].forEach(function(evt) { btn.addEventListener(evt, function(e) { e.preventDefault();
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
           var card = btn.closest('.faq-card');
           var isOpen = card.classList.contains('open');
           document.querySelectorAll('.faq-card.open').forEach(function(el) { el.classList.remove('open'); });
           if (!isOpen) card.classList.add('open');
-        }); }); 
+        });
       });
 
       // ── Scroll shadow on nav ──
@@ -1321,6 +1322,25 @@
         }
       });
 
+      // ── Photo frames — lightbox on tap/click ──
+      document.querySelectorAll('.photo-frame').forEach(function(frame) {
+        frame.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var src = frame.querySelector('img').src;
+          openLightbox(src);
+        });
+      });
+
+      // ── Lightbox close on backdrop/button click ──
+      document.getElementById('lightbox').addEventListener('click', function(e) {
+        closeLightbox();
+      });
+
+      document.querySelector('.lightbox-close').addEventListener('click', function(e) {
+        e.stopPropagation();
+        closeLightbox();
+      });
+
     });
 
     function closeMobile() {
@@ -1330,11 +1350,23 @@
 
     // ── Lightbox ──
     function openLightbox(src) {
+      var lb = document.getElementById('lightbox');
       document.getElementById('lightbox-img').src = src;
-      document.getElementById('lightbox').classList.add('open');
+      lb.classList.add('open');
       document.body.style.overflow = 'hidden';
     }
 
     function closeLightbox() {
       document.getElementById('lightbox').classList.remove('open');
-      document.body.style.overflow 
+      document.getElementById('lightbox-img').src = '';
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeLightbox();
+    });
+
+  </script>
+
+</body>
+</html>
