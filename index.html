@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HaltonSites — Websites for Small Business</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #fafafa;
+      --white: #ffffff;
+      --ink: #111111;
+      --accent: #0066ff;
+      --muted: #888888;
+      --border: #e8e8e8;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 3rem;
+      background: rgba(250,250,250,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      transition: box-shadow 0.3s;
+    }
+
+    nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.07); }
+
+    /* WORDMARK LOGO */
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
+
+    .logo-mark {
+      width: 28px; height: 28px;
+      background: var(--accent);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .logo-mark svg {
+      width: 16px; height: 16px;
+      fill: none;
+      stroke: white;
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+
+    .logo-text {
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      line-height: 1;
+    }
+
+    .logo-text span {
+      color: var(--accent);
+      font-weight: 400;
+    }
+
+    .logo-dot {
+      display: inline-block;
+      width: 4px; height: 4px;
+      background: var(--accent);
+      border-radius: 50%;
+      margin: 0 0.1rem 0.15rem;
+      vertical-align: middle;
+    }
+
+    /* NAV RIGHT */
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .nav-links a {
+      font-size: 0.82rem;
+      font-weight: 400;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.4rem 0.75rem;
+      border-radius: 4px;
+      transition: color 0.2s, background 0.2s;
+      position: relative;
+    }
+
+    .nav-links a:hover { color: var(--ink); background: #f0f0f0; }
+    .nav-links a.active { color: var(--accent); font-weight: 500; }
+
+    .nav-cta {
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--white);
+      background: var(--ink);
+      padding: 0.5rem 1.2rem;
+      border-radius: 6px;
+      transition: background 0.2s, transform 0.15s;
+      white-space: nowrap;
+    }
+
+    .nav-cta:hover { background: var(--accent); transform: translateY(-1px); }
+
+    /* HAMBURGER */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 22px; height: 2px;
+      background: var(--ink);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* MOBILE MENU */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 65px; left: 0; right: 0;
+      z-index: 190;
+      background: rgba(250,250,250,0.98);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      flex-direction: column;
+      gap: 0.5rem;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    }
+
+    .mobile-menu.open { display: flex; }
+
+    .mobile-menu a {
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: var(--ink);
+      text-decoration: none;
+      padding: 0.65rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .mobile-menu a:last-child {
+      border-bottom: none;
+      font-weight: 500;
+      color: var(--accent);
+      margin-top: 0.5rem;
+    }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 9rem 3rem 5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.1s forwards;
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 7vw, 6rem);
+      font-weight: 300;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      max-width: 800px;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.25s forwards;
+    }
+
+    .hero h1 strong { font-weight: 600; color: var(--accent); }
+
+    .hero-footer {
+      margin-top: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      opacity: 0;
+      animation: fadeUp 0.6s 0.4s forwards;
+    }
+
+    .hero-sub {
+      font-size: 0.95rem;
+      color: var(--muted);
+      max-width: 400px;
+      line-height: 1.7;
+    }
+
+    .hero-actions { display: flex; align-items: center; gap: 1.5rem; }
+
+    .hero-price { font-size: 0.85rem; color: var(--muted); }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 0.75rem 1.75rem;
+      border-radius: 6px;
+      transition: opacity 0.2s, transform 0.2s, background 0.2s;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+
+    .btn-dark { background: var(--ink); color: var(--white); }
+    .btn-dark:hover { background: var(--accent); opacity: 1; }
+    .btn-light { background: var(--white); color: var(--ink); }
+    .btn-light:hover { opacity: 0.9; }
+
+    /* ── MARQUEE ── */
+    .marquee-wrap {
+      overflow: hidden;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--border);
+      background: #f0f0f0;
+    }
+
+    .marquee-track {
+      display: flex;
+      gap: 2rem;
+      animation: marquee 24s linear infinite;
+      white-space: nowrap;
+    }
+
+    .marquee-track span {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .marquee-track span.dot { color: #ccc; }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ── LOCAL SECTION ── */
+    .local-section {
+      padding: 5rem 3rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      gap: 4rem;
+    }
+
+    .local-pin { font-size: 3.5rem; flex-shrink: 0; line-height: 1; }
+    .local-inner { max-width: 620px; }
+
+    .local-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 0.28rem 0.8rem;
+      border-radius: 100px;
+      margin-bottom: 1.25rem;
+    }
+
+    .local-section h2 {
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 0.85rem;
+    }
+
+    .local-section p {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    /* ── SECTION SHARED ── */
+    section { padding: 6rem 3rem; }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 3rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .section-header h2 { font-size: 1rem; font-weight: 500; letter-spacing: -0.01em; }
+    .section-header span { font-size: 0.8rem; color: var(--muted); }
+
+    /* ── PROCESS ── */
+    .process-section {
+      padding: 6rem 3rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--accent);
+      color: var(--white);
+    }
+
+    .process-section .section-header { border-bottom-color: rgba(255,255,255,0.2); }
+    .process-section .section-header h2 { color: var(--white); }
+    .process-section .section-header span { color: rgba(255,255,255,0.5); }
+
+    .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
+
+    .step {
+      padding: 2rem 2rem 2rem 0;
+      border-right: 1px solid rgba(255,255,255,0.2);
+      transition: background 0.25s;
+      border-radius: 0;
+    }
+
+    .step:last-child { border-right: none; padding-right: 0; }
+    .step:not(:first-child) { padding-left: 2rem; }
+    .step:hover { background: rgba(255,255,255,0.07); border-radius: 8px; }
+
+    .step-num {
+      font-size: 3rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.2);
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+
+    .step h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.01em; color: white; }
+    .step p { font-size: 0.85rem; color: rgba(255,255,255,0.65); line-height: 1.65; }
+
+    /* ── INCLUDES ── */
+    .includes-section {
+      padding: 6rem 3rem;
+      border-bottom: 1px solid var(--border);
+      background: #e8f0ff;
+    }
+
+    .includes-section .section-header { border-bottom-color: rgba(0,102,255,0.15); }
+
+    .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+
+    .feature {
+      padding: 2rem;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.6);
+      transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+      cursor: default;
+    }
+
+    .feature:nth-child(3n) { border-right: none; }
+    .feature:nth-child(4), .feature:nth-child(5), .feature:nth-child(6) { border-bottom: none; }
+
+    .feature:hover {
+      background: var(--white);
+      box-shadow: 0 4px 20px rgba(0,102,255,0.08);
+      transform: translateY(-2px);
+      z-index: 1;
+      position: relative;
+    }
+
+    .feature-icon { font-size: 1.2rem; margin-bottom: 0.85rem; }
+    .feature h3 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.4rem; letter-spacing: -0.01em; }
+    .feature p { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── PRICING ── */
+    .pricing-section { padding: 6rem 3rem; border-bottom: 1px solid var(--border); }
+
+    .price-card {
+      max-width: 480px;
+      border: 1.5px solid var(--accent);
+      border-radius: 12px;
+      padding: 2.5rem;
+      background: #e8f0ff;
+      transition: box-shadow 0.25s, transform 0.25s;
+    }
+
+    .price-card:hover {
+      box-shadow: 0 8px 40px rgba(0,102,255,0.12);
+      transform: translateY(-3px);
+    }
+
+    .price-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid rgba(0,102,255,0.15);
+    }
+
+    .price-top h3 { font-size: 1rem; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 0.3rem; }
+    .price-top p { font-size: 0.82rem; color: var(--muted); }
+
+    .price-num {
+      font-size: 2.5rem;
+      font-weight: 300;
+      letter-spacing: -0.04em;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .price-num sup { font-size: 1rem; vertical-align: super; font-weight: 400; }
+
+    .price-includes {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .price-includes li {
+      font-size: 0.875rem;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .price-includes li::before { content: '—'; color: var(--accent); }
+    .price-card .btn-dark { width: 100%; text-align: center; }
+
+    /* ── CTA ── */
+    .cta-section {
+      padding: 7rem 3rem;
+      background: var(--ink);
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      pointer-events: none;
+      animation: orbFloat 8s ease-in-out infinite;
+    }
+
+    .cta-orb-1 { width: 300px; height: 300px; background: rgba(0,102,255,0.25); top: -80px; right: 5%; animation-delay: 0s; }
+    .cta-orb-2 { width: 200px; height: 200px; background: rgba(0,102,255,0.15); bottom: -60px; right: 25%; animation-delay: -3s; }
+    .cta-orb-3 { width: 150px; height: 150px; background: rgba(100,180,255,0.12); top: 30%; left: 5%; animation-delay: -5s; }
+
+    @keyframes orbFloat {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-20px) scale(1.05); }
+    }
+
+    .cta-inner { position: relative; z-index: 1; }
+
+    .cta-section h2 {
+      font-size: clamp(2rem, 4vw, 4rem);
+      font-weight: 300;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      max-width: 500px;
+      margin-bottom: 2.5rem;
+    }
+
+    .cta-section h2 strong { font-weight: 600; }
+
+    .cta-section .btn-light {
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 1rem 2.25rem;
+      border-radius: 8px;
+      box-shadow: 0 0 0 rgba(255,255,255,0);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .cta-section .btn-light:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(255,255,255,0.15);
+      opacity: 1;
+    }
+
+    /* ── FAQ ── */
+    .faq-section {
+      padding: 6rem 3rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--white);
+    }
+
+    .faq-list {
+      max-width: 680px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .faq-item:first-child { border-top: 1px solid var(--border); }
+
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.35rem 0;
+      text-align: left;
+      font-family: inherit;
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: var(--ink);
+      transition: color 0.2s;
+    }
+
+    .faq-question:hover { color: var(--accent); }
+
+    .faq-icon {
+      width: 20px; height: 20px;
+      flex-shrink: 0;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      color: var(--muted);
+      transition: transform 0.3s, background 0.2s, border-color 0.2s;
+    }
+
+    .faq-item.open .faq-icon {
+      transform: rotate(45deg);
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.35s ease;
+    }
+
+    .faq-item.open .faq-answer { max-height: 200px; }
+
+    .faq-answer p {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.75;
+      padding-bottom: 1.35rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 1.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      color: #555;
+      border-top: 1px solid #222;
+      background: var(--ink);
+    }
+
+    footer a { color: #777; text-decoration: none; transition: color 0.2s; }
+    footer a:hover { color: var(--white); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .nav-cta { display: none; }
+      .hamburger { display: flex; }
+
+      .hero, section, .local-section, .cta-section, footer {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+      }
+
+      .hero { padding-top: 7rem; }
+      .local-section { flex-direction: column; gap: 1.5rem; padding-top: 3rem; padding-bottom: 3rem; }
+      .local-pin { font-size: 2.5rem; }
+
+      .steps { grid-template-columns: 1fr 1fr; }
+      .step { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.15); padding: 1.5rem 0; }
+      .step:last-child { border-bottom: none; }
+      .step:not(:first-child) { padding-left: 0; }
+      .step:hover { transform: none; }
+
+      .features { grid-template-columns: 1fr 1fr; }
+      .feature:nth-child(3n) { border-right: 1px solid var(--border); }
+      .feature:nth-child(2n) { border-right: none; }
+      .feature:hover { transform: none; box-shadow: none; }
+
+      .price-card:hover { transform: none; }
+
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a class="logo" href="#">
+      <div class="logo-mark">
+        <svg viewBox="0 0 16 16">
+          <rect x="2" y="2" width="5" height="5" rx="1"/>
+          <rect x="9" y="2" width="5" height="5" rx="1"/>
+          <rect x="2" y="9" width="5" height="5" rx="1"/>
+          <path d="M9 11.5h5M11.5 9v5"/>
+        </svg>
+      </div>
+      <span class="logo-text">halton<span>sites</span><i class="logo-dot"></i>ca</span>
+    </a>
+
+    <div class="nav-right">
+      <nav class="nav-links">
+        <a href="#how" data-section="how">How it works</a>
+        <a href="#included" data-section="included">What's included</a>
+        <a href="#pricing" data-section="pricing">Pricing</a>
+        <a href="#faq" data-section="faq">FAQ</a>
+      </nav>
+      <a href="https://tally.so/r/ODzxBR" target="_blank" class="nav-cta">Get started</a>
+    </div>
+
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#how" onclick="closeMobile()">How it works</a>
+    <a href="#included" onclick="closeMobile()">What's included</a>
+    <a href="#pricing" onclick="closeMobile()">Pricing</a>
+    <a href="#faq" onclick="closeMobile()">FAQ</a>
+    <a href="https://tally.so/r/ODzxBR" target="_blank" onclick="closeMobile()">Get started →</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="hero-label">haltonsites.ca · Halton Region, ON</p>
+    <h1>Go from no website<br>to <strong>live in 48 hours.</strong><br>$500, nothing more.</h1>
+    <div class="hero-footer">
+      <p class="hero-sub">I build clean, professional one-page websites for small businesses in Burlington, Oakville, Milton and surrounding areas — no tech knowledge needed on your end.</p>
+      <div class="hero-actions">
+        <span class="hero-price">Includes copy & setup</span>
+        <a href="https://tally.so/r/ODzxBR" target="_blank" class="btn btn-dark">Get started →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span>Barbers</span><span class="dot">·</span>
+      <span>Plumbers</span><span class="dot">·</span>
+      <span>Coffee Shops</span><span class="dot">·</span>
+      <span>Roofers</span><span class="dot">·</span>
+      <span>Electricians</span><span class="dot">·</span>
+      <span>Restaurants</span><span class="dot">·</span>
+      <span>Landscapers</span><span class="dot">·</span>
+      <span>Personal Trainers</span><span class="dot">·</span>
+      <span>Cleaners</span><span class="dot">·</span>
+      <span>Contractors</span><span class="dot">·</span>
+      <span>Barbers</span><span class="dot">·</span>
+      <span>Plumbers</span><span class="dot">·</span>
+      <span>Coffee Shops</span><span class="dot">·</span>
+      <span>Roofers</span><span class="dot">·</span>
+      <span>Electricians</span><span class="dot">·</span>
+      <span>Restaurants</span><span class="dot">·</span>
+      <span>Landscapers</span><span class="dot">·</span>
+      <span>Personal Trainers</span><span class="dot">·</span>
+      <span>Cleaners</span><span class="dot">·</span>
+      <span>Contractors</span><span class="dot">·</span>
+    </div>
+  </div>
+
+  <!-- LOCAL TRUST -->
+  <section class="local-section reveal">
+    <div class="local-pin">📍</div>
+    <div class="local-inner">
+      <div class="local-badge">Halton Local</div>
+      <h2>You're not hiring a stranger from the internet.</h2>
+      <p>I live and work right here in Halton — the same community you serve every day. When you reach out, you're talking to a neighbour who genuinely wants to see local businesses succeed. No overseas outsourcing, no call centres, no runaround. Just a real person, down the street, who knows this area.</p>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="process-section" id="how">
+    <div class="section-header reveal">
+      <h2>How it works</h2>
+      <span>Four simple steps</span>
+    </div>
+    <div class="steps">
+      <div class="step reveal reveal-delay-1">
+        <div class="step-num">01</div>
+        <h3>Fill a short form</h3>
+        <p>Tell me about your business, services, and contact info. Takes about 5 minutes.</p>
+      </div>
+      <div class="step reveal reveal-delay-2">
+        <div class="step-num">02</div>
+        <h3>I build your site</h3>
+        <p>A clean one-pager tailored to your business — no templates, no fluff.</p>
+      </div>
+      <div class="step reveal reveal-delay-3">
+        <div class="step-num">03</div>
+        <h3>Review & approve</h3>
+        <p>You review the site and request any changes. I make them fast.</p>
+      </div>
+      <div class="step reveal reveal-delay-4">
+        <div class="step-num">04</div>
+        <h3>Go live</h3>
+        <p>Your site goes live on your domain. Customers can find you on Google.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT'S INCLUDED -->
+  <section class="includes-section" id="included">
+    <div class="section-header reveal">
+      <h2>What's included</h2>
+      <span>Everything you need</span>
+    </div>
+    <div class="features">
+      <div class="feature reveal reveal-delay-1">
+        <div class="feature-icon">⚡</div>
+        <h3>Fast & Mobile-Friendly</h3>
+        <p>Loads instantly on any device — phone, tablet, or desktop.</p>
+      </div>
+      <div class="feature reveal reveal-delay-2">
+        <div class="feature-icon">🔍</div>
+        <h3>Google-Ready</h3>
+        <p>Built so search engines can find and index your business.</p>
+      </div>
+      <div class="feature reveal reveal-delay-3">
+        <div class="feature-icon">✍️</div>
+        <h3>Copy Written For You</h3>
+        <p>I write all the text based on what you tell me about your business.</p>
+      </div>
+      <div class="feature reveal reveal-delay-1">
+        <div class="feature-icon">🌐</div>
+        <h3>Custom Domain</h3>
+        <p>I'll help you get the right domain and handle the full setup.</p>
+      </div>
+      <div class="feature reveal reveal-delay-2">
+        <div class="feature-icon">🕐</div>
+        <h3>Ready in 48 Hours</h3>
+        <p>Fill the form today, have a live website by end of week.</p>
+      </div>
+      <div class="feature reveal reveal-delay-3">
+        <div class="feature-icon">📍</div>
+        <h3>Local to Halton</h3>
+        <p>I'm based in the area — not some overseas agency.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="pricing-section" id="pricing">
+    <div class="section-header reveal">
+      <h2>Pricing</h2>
+      <span>One price, no surprises</span>
+    </div>
+    <div class="price-card reveal">
+      <div class="price-top">
+        <div>
+          <h3>Website Setup</h3>
+          <p>One-time fee</p>
+        </div>
+        <div class="price-num"><sup>$</sup>500</div>
+      </div>
+      <ul class="price-includes">
+        <li>Custom one-page website</li>
+        <li>Copy written for you</li>
+        <li>Mobile & desktop optimized</li>
+        <li>Domain setup assistance</li>
+        <li>2 rounds of revisions</li>
+      </ul>
+      <a href="https://tally.so/r/ODzxBR" target="_blank" class="btn btn-dark">Get started →</a>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section" id="faq">
+    <div class="section-header reveal">
+      <h2>Common questions</h2>
+      <span>Quick answers</span>
+    </div>
+    <div class="faq-list reveal">
+
+      <div class="faq-item">
+        <button class="faq-question">
+          Do I need to do anything technical?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Not at all. You fill in a short form with your business details, send me your photos if you have any, and I handle everything else — building, hosting, and getting it live. No logins, no dashboards, no tech stress.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          What if I don't have photos or a logo?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>No problem. Even a few photos taken on your phone work perfectly. If you don't have a logo, I'll create a clean text-based one for you as part of the build. Your site will still look great.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          How quickly will you get back to me after I submit the form?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>I'll reach out within a few hours of receiving your form to confirm details and get started. Your site will be ready for review within 48 hours of that first conversation.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          Can I make changes after the site is live?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Yes. Small updates like changing your hours, adding a service, or updating contact info are easy — just email me. The $500 includes 2 rounds of revisions before launch, and we can discuss ongoing updates after.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          Are there any ongoing costs after the $500?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>The only ongoing cost is your domain name — typically $15–20/year. Hosting is included at no extra charge. There are no hidden monthly fees from me. If you want me to manage your domain and handle future updates, we can discuss a simple care plan.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="cta-orb cta-orb-1"></div>
+    <div class="cta-orb cta-orb-2"></div>
+    <div class="cta-orb cta-orb-3"></div>
+    <div class="cta-inner reveal">
+      <h2>Ready to have a<br><strong>website this week?</strong></h2>
+      <a href="https://tally.so/r/ODzxBR" target="_blank" class="btn btn-light">Get started — it takes 5 minutes →</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>© 2025 HaltonSites · <a href="https://haltonsites.ca">haltonsites.ca</a> · Halton Region, ON</span>
+    <span>Built for Halton businesses, by a Halton local. · <a href="mailto:barishiz@gmail.com">barishiz@gmail.com</a></span>
+  </footer>
+
+  <script>
+    // ── FAQ accordion ──
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.parentElement;
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+        if (!isOpen) item.classList.add('open');
+      });
+    });
+
+    // ── Scroll shadow on nav ──
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    // ── Active nav link on scroll ──
+    const sections = { how: null, included: null, pricing: null, faq: null };
+    Object.keys(sections).forEach(id => { sections[id] = document.getElementById(id); });
+
+    const navLinks = document.querySelectorAll('.nav-links a[data-section]');
+
+    function updateActiveLink() {
+      let current = '';
+      Object.entries(sections).forEach(([id, el]) => {
+        if (el && window.scrollY >= el.offsetTop - 120) current = id;
+      });
+      navLinks.forEach(a => {
+        a.classList.toggle('active', a.dataset.section === current);
+      });
+    }
+
+    window.addEventListener('scroll', updateActiveLink);
+
+    // ── Scroll reveal ──
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    reveals.forEach(el => observer.observe(el));
+
+    // ── Mobile menu ──
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    });
+
+    function closeMobile() {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+    }
+
+    // close mobile menu on outside click
+    document.addEventListener('click', (e) => {
+      if (!navbar.contains(e.target) && !mobileMenu.contains(e.target)) closeMobile();
+    });
+  </script>
+
+</body>
+</html>
