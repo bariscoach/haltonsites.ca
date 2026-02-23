@@ -576,38 +576,31 @@
       border-bottom-color: rgba(0,102,255,0.15);
     }
 
-    .references-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
-      margin-top: 1rem;
-    }
-
     .reference-card {
       background: var(--white);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 2rem;
-      transition: box-shadow 0.25s, transform 0.25s;
-      text-decoration: none;
-      color: inherit;
-      display: block;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
     }
 
-    .reference-card:hover {
-      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-      transform: translateY(-3px);
+    .reference-body {
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
 
     .reference-top {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1.25rem;
+      gap: 1rem;
     }
 
     .reference-name {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 600;
       letter-spacing: -0.02em;
       color: var(--ink);
@@ -636,23 +629,120 @@
       animation: pulse 2s ease-in-out infinite;
     }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
-
     .reference-desc {
       font-size: 0.875rem;
       color: var(--muted);
       line-height: 1.7;
-      margin-bottom: 1.5rem;
+      max-width: 480px;
     }
 
-    .reference-url {
+    .reference-link {
       font-size: 0.78rem;
       font-weight: 500;
       color: var(--accent);
-      letter-spacing: 0.02em;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .reference-link:hover { text-decoration: underline; }
+
+    /* PHOTO FRAMES */
+    .reference-photos {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      padding: 1.5rem;
+      background: #f0f4ff;
+      border-top: 1px solid rgba(0,102,255,0.1);
+    }
+
+    .photo-frame {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: zoom-in;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+      aspect-ratio: 4/3;
+      background: #dde8ff;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .photo-frame:hover img { transform: scale(1.04); }
+
+    .photo-frame::after {
+      content: '⤢';
+      position: absolute;
+      bottom: 8px; right: 8px;
+      width: 26px; height: 26px;
+      background: rgba(0,0,0,0.5);
+      color: white;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .photo-frame:hover::after { opacity: 1; }
+
+    /* LIGHTBOX */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: rgba(0,0,0,0.92);
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-out;
+    }
+
+    .lightbox.open { display: flex; }
+
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 88vh;
+      border-radius: 12px;
+      box-shadow: 0 20px 80px rgba(0,0,0,0.5);
+      animation: lightboxIn 0.25s ease;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 1.5rem; right: 1.5rem;
+      width: 40px; height: 40px;
+      background: rgba(255,255,255,0.15);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .lightbox-close:hover { background: rgba(255,255,255,0.3); }
+
+    @keyframes lightboxIn {
+      from { opacity: 0; transform: scale(0.92); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @media (max-width: 768px) {
+      .reference-photos { grid-template-columns: 1fr 1fr; }
+      .reference-body { flex-direction: column; align-items: flex-start; }
     }
 
     /* ── FAQ ── */
@@ -1033,17 +1123,34 @@
       <h2>References</h2>
       <span>Real sites, real businesses</span>
     </div>
-    <div class="references-grid">
-      <a class="reference-card reveal" href="https://wegather.ca" target="_blank">
+    <div class="reference-card reveal">
+      <div class="reference-body">
         <div class="reference-top">
           <span class="reference-name">gather.</span>
           <span class="reference-live">Live</span>
         </div>
-        <p class="reference-desc">A community events brand bringing women in Burlington, Oakville and Hamilton together for monthly evenings worth leaving the house for. One-page site covering their concept, how it works, and a waitlist signup.</p>
-        <span class="reference-url">wegather.ca →</span>
-      </a>
+        <p class="reference-desc">A community events brand bringing women in Burlington, Oakville and Hamilton together for monthly evenings worth leaving the house for.</p>
+        <a class="reference-link" href="https://wegather.ca" target="_blank">wegather.ca →</a>
+      </div>
+      <div class="reference-photos">
+        <div class="photo-frame" onclick="openLightbox('https://raw.githubusercontent.com/bariscoach/haltonsites.ca/main/gather_1.png')">
+          <img src="https://raw.githubusercontent.com/bariscoach/haltonsites.ca/main/gather_1.png" alt="gather. screenshot 1" loading="lazy"/>
+        </div>
+        <div class="photo-frame" onclick="openLightbox('https://raw.githubusercontent.com/bariscoach/haltonsites.ca/main/gather_2.png')">
+          <img src="https://raw.githubusercontent.com/bariscoach/haltonsites.ca/main/gather_2.png" alt="gather. screenshot 2" loading="lazy"/>
+        </div>
+        <div class="photo-frame" onclick="openLightbox('https://raw.githubusercontent.com/bariscoach/haltonsites.ca/main/gather_3.png')">
+          <img src="https://raw.githubusercontent.com/bariscoach/haltonsites.ca/main/gather_3.png" alt="gather. screenshot 3" loading="lazy"/>
+        </div>
+      </div>
     </div>
   </section>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <img id="lightbox-img" src="" alt="Screenshot preview"/>
+  </div>
 
   <!-- FAQ -->
   <section class="faq-section" id="faq">
@@ -1133,7 +1240,7 @@
     <span>One-page websites for small businesses · <a href="/cdn-cgi/l/email-protection#1f7d7e6d766c7776655f78727e7673317c7072"><span class="__cf_email__" data-cfemail="c5a7a4b7acb6adacbf85a2a8a4aca9eba6aaa8">[email&#160;protected]</span></a></span>
   </footer>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>  <script>
     document.addEventListener('DOMContentLoaded', function() {
 
       // ── FAQ accordion ──
@@ -1197,4 +1304,34 @@
       document.addEventListener('click', function(e) {
         if (!navbar.contains(e.target) && !mobileMenu.contains(e.target)) {
           hamburger.classList.remove('open');
-          mobileMenu.classList.remove('
+          mobileMenu.classList.remove('open');
+        }
+      });
+
+    });
+
+    function closeMobile() {
+      document.getElementById('hamburger').classList.remove('open');
+      document.getElementById('mobileMenu').classList.remove('open');
+    }
+
+    // ── Lightbox ──
+    function openLightbox(src) {
+      document.getElementById('lightbox-img').src = src;
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeLightbox();
+    });
+
+  </script>
+
+</body>
+</html>
